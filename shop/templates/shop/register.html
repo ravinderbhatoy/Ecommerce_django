@@ -1,0 +1,43 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+{% include 'shop/head.html' %}
+
+<body class="overflow-hidden">
+    {% include 'shop/navbar.html' %}
+    
+    <div class="custom-container d-flex align-items-center justify-content-center">
+        <div class="center-box border p-5 rounded-3 m-5">
+           
+            <form action="{% url 'register' %}" method="POST" class="text-center">
+                {% csrf_token %}
+                    <h1 class="text-primary fw-bold text-center mb-4">Welcome</h1>
+                    <input class=" fs-5 p-2 w-100 form-control" name="username" type="text" placeholder="username">
+                    <br>
+                    <input class=" fs-5 p-2 w-100 form-control" name="email" type="text" placeholder="email">
+                    <br>
+                    <input class=" fs-5 p-2 w-100 form-control" name="password" type="password" placeholder="password">
+                    <br>
+                    <input class=" fs-5 p-2 w-100 form-control" name="confirmPassword" type="password" placeholder="confirm password">
+                    <br>
+                    {% if message %}
+                        <div class="alert alert-danger d-flex align-items-center justify-content-between" role="alert">
+                            {{message}}
+                            <i id="close" class="bi bi-x fs-4"></i>
+                        </div>
+                    {% endif %}
+                    <button class="btn btn-primary text-white px-4 py-2 my-3 w-100">Sign up</button>
+                    <a href="{%url 'login'%}">Already a user? login instead</a>
+            </form>
+        </div>
+    </div>
+    {% include "shop/footer.html" %}
+    <script >
+        const close = document.getElementById('close')
+        const message = document.querySelector('.alert')
+        close.addEventListener('click', () => message.remove())
+    </script>
+</body>
+
+</html>
