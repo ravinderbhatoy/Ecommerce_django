@@ -1,7 +1,9 @@
 from django.conf.urls.static import static
+from django.conf.urls import handler404
 from django.conf import settings
 from django.urls import path
 from . import views
+from django.shortcuts import render
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -20,3 +22,9 @@ urlpatterns = [
     path('mail-sender', views.mail_sender, name='mail-sender'),
     path('checkout', views.checkout, name='checkout'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+def custom_404(request):
+    return render(request, '404.html', status=404)
+
+handler404 = custom_404

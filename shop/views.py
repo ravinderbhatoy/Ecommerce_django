@@ -17,7 +17,7 @@ def home(request):
     fruits = Product.objects.filter(category="fruits")
     context = {'all_products': products, 'vegetables': vegetables, 'fruits': fruits}
     if request.user.is_authenticated:
-        cart = Cart.objects.get(user=request.user)
+        cart, created = Cart.objects.get_or_create(user=request.user)
         cart_items = cartItem.objects.filter(cart=cart)
         if cart is not None:
             context['cart_count'] = cart_items.all().count()
@@ -231,6 +231,11 @@ def user_logout(request):
 
 # contact page
 def contact(request):
+    context = {}
+    if request.user.is_authenticated:
+        cart = Cart.objects.get(user=request.user)
+        cart_item = cartItem.objects.filter(cart=cart)
+        context = {'cart_count': cart_item.all().count()}
     if request.method == 'POST':
         print("sending email....")
         user_email = request.POST['email']
@@ -253,7 +258,7 @@ def contact(request):
                 print(e)
         else:
             print("Error in sending email")
-    return render(request, 'shop/contact.html')
+    return render(request, 'shop/contact.html', context=context)
 
 # sending email
 def mail_sender(request):
